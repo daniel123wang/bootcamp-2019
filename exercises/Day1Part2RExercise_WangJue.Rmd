@@ -1,0 +1,108 @@
+---
+title: "Rmd Exercise Template"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## The question you are answering
+
+You use the `##` to create a header. Use the header to indicate the question you are answering. After the header, in this space here, annotate your answer, telling us what you did.
+
+```{r chunk name}
+# Here is where your R code goes. ``` opens the code chunk, followed by {r}. Then ``` closes the chunk. When you 'knit' the file, the codes will evaluate.
+
+dat <- read.csv("path/to/data/data.csv")
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r another chunk name}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+# Load the Data
+```{r}
+gapminder <- read.csv(here::here("data/gapminder5.csv"), stringsAsFactors=FALSE)
+```
+
+# If Statement
+```{r}
+year <- 2002
+if(any(gapminder$year == year)){
+    print("There are records from 2002 in the gapminder dataset")
+}else {
+    print("There are NO records from 2002 in the gapminder dataset")
+}
+```
+
+# Loop and If Statement
+```{r}
+countries <- unique(gapminder$country)
+continents <- unique(gapminder$continent)
+m <- mean(gapminder$pop, na.rm = T)
+for (c in countries){
+    if (mean(gapminder$pop[gapminder$country == c]) < m){
+        mean_le <- mean(gapminder$lifeExp[gapminder$country == c])
+        print(paste(c, " ",mean_le))
+    }
+}
+
+for (con in continents){
+    mean_le <- mean(gapminder$lifeExp[gapminder$continent == con])
+    if (mean_le > 70){
+        print(paste(con, "Greater than 70."))
+    }
+    else if (mean_le < 50){
+        print(paste(con, "Smaller than 50"))
+    }
+    else{
+        print(paste(con, "Between 50 and 70"))
+    }
+}
+
+```
+
+# Write Functions
+```{r}
+f_1 <- function(df){
+    for (i in 1:ncol(df)){
+        a = colnames(df)[i]
+        b = class(df[,i])
+        print(paste(a, b))
+      
+    }
+}
+f_1(gapminder)
+
+f_2 <- function(vec, med = T){
+    mean_vec = mean(vec)
+    sd_vec = sd(vec)
+    med_vec = median(vec)
+    if (med){
+        cat("Mean:", mean_vec, "\nStandard Deviation:", sd_vec, "\nMedian:", med_vec)
+    }else{
+        cat("Mean:", mean_vec, "\nStandard Deviation:", sd_vec)
+    }
+    
+}
+
+f_2(c(1:5))
+
+```
+
+# Analyzing the Relationship
+```{r}
+log_gdp <- log(gapminder$gdpPercap)
+log_le <- log(gapminder$lifeExp)
+plot(log_gdp~log_le)
+
+```
+
