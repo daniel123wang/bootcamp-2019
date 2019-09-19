@@ -103,6 +103,19 @@ f_2(c(1:5))
 log_gdp <- log(gapminder$gdpPercap)
 log_le <- log(gapminder$lifeExp)
 plot(log_gdp~log_le)
+years <- unique(gapminder$year)
+viz_lm <- function(df, dv, iv, year) {
+    dat <- df[df[["year"]] == year, ]
+    y <- log(dat[[dv]])
+    x <- log(dat[[iv]])
+    fit <- lm(y ~ x)
+    plot(y ~ x, main = year,
+         xlab = iv, ylab = dv)
+    lines(x, predict(fit), col = 'blue')
+}
 
+for (i in years) {
+  viz_lm(gapminder, "gdpPercap", "lifeExp", i)
+}
 ```
 
